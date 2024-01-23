@@ -1,4 +1,4 @@
-from django.db.models import Sum  # Agrega esta línea
+from django.db.models import Sum
 from decimal import Decimal
 from loans.models import Loan
 from customers.models import Customer

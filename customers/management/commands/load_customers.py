@@ -1,7 +1,6 @@
 import csv
 from decimal import Decimal
 from django.core.management.base import BaseCommand
-from django.utils import timezone
 from customers.models import Customer
 
 class Command(BaseCommand):

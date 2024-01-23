@@ -1,9 +1,9 @@
 from django.db import models
 import uuid
 from django.db.models import PROTECT
-from django.utils import timezone
 from customers.models import Customer
-
+from django.forms import ValidationError
+from django.utils import timezone
 
 class Loan(models.Model):
     STATUS_CHOICES = (
@@ -12,7 +12,7 @@ class Loan(models.Model):
         (3, 'Rejected'),
         (4, 'Paid'),
     )
-    external_id = models.CharField(max_length=60, unique=True, default=uuid.uuid4)
+    external_id = models.CharField(max_length=60, unique=True, default=uuid.uuid4, primary_key=True)
     customer_external = models.ForeignKey(Customer, null=False, on_delete=PROTECT, related_name="customer_loan")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -24,13 +24,18 @@ class Loan(models.Model):
     maximus_payment_date = models.DateTimeField(auto_now=True)
     take_at = models.DateTimeField(null=True)
 
-    def update_amount(self, amount_paid):
+    def validate_loan(self, customer, amount_paid):
+        if self.status == 1:
+            raise ValidationError(f'Loan {self.external_id} is pending.')
+        if self.customer_external != customer:
+            raise ValidationError(f'Load not is that -> {customer.external_id}')
         if amount_paid > self.outstanding:
-            self.status = 4
+            raise ValidationError(f'Paid bigger than load -> {self.external_id}')
+
+    def paid_loan(self, amount_paid):
+        if amount_paid <= self.outstanding:
+            self.outstanding = self.outstanding - amount_paid
+            if self.outstanding == 0:
+                self.status = 4
+                self.paid_at = timezone.now()
             self.save()
-            raise Exception()
-        self.outstanding = self.outstanding - amount_paid
-        if self.outstanding == 0:
-            self.status = 4
-            self.paid_at = timezone.now()
-        self.save()
