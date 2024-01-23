@@ -3,4 +3,4 @@ djangorestframework==3.12.2
 drf-spectacular==0.19.0
 djangorestframework-api-key==2.*
 pytest==7.4.*
-model_bakery==*
+model_bakery==1.10.*
