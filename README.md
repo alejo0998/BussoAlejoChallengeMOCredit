@@ -16,6 +16,9 @@ probar los endpoints, importante destacar que antes de usar cualquier endpoint h
 Respecto al apiKey, unicamente cree el endpoint para que devuelva un token, sin solicitar usuario ni password porque considere que no lo ameritaba para el challenge y agregaria una complejidad extra de crear usuarios cuando no era lo solicitado.
 En http://localhost:8000/api/schema/redoc/ se encuentra la documentacion de la api.
 
+Customers:
+-  Para la creacion de customers via un archivo plano, agregue en formato csv un ejemplo de como deberia agregar los diferentes customers y se crea con el comando load_customers el cual pide como parametro la ubicacion de donde esta el archivo csv para leerlo y crear los objetos indicados.
+
 Modelado:
 -  Respecto al modelo, respete lo indicado en el DER, con una unica modificacion donde agregue un motivo de rechazo en el modelo Payments, para caso de que se rechace un pago quede persistido el porque.
 -  Se setearon los correspondientes defaults en el modelo.
